@@ -1,0 +1,21 @@
+{
+  "name": "symfony-micro-test-app",
+  "license": "MIT",
+  "type": "project",
+  "description": "Symfony 3 Micro Trait test application",
+  "autoload": {
+    "psr-4": {
+      "DemoBundle\\": "DemoBundle/"
+    }
+  },
+  "require": {
+    "symfony/symfony": "~3.4",
+    "sensio/framework-extra-bundle": "~3.0,>=3.0.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.5"
+  },
+  "config": {
+    "bin-dir": "bin"
+  }
+}

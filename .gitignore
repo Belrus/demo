@@ -1,0 +1,15 @@
+# Cache, session files and logs (Symfony3)
+/cache/*
+/logs/*
+!/cache/.gitkeep
+!/logs/.gitkeep
+
+# Parameters
+/config/parameters.yml
+
+# Managed by Composer
+/bin/*
+/vendor/
+
+/.idea/
+
