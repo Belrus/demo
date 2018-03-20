@@ -23,4 +23,13 @@ class DefaultController extends Controller
         return $this->render('DemoBundle:Default:index.html.twig');
     }
 
+    /**
+     * @Route("/parse-logs")
+     */
+    public function parseLogsAction(){
+
+    }
+
+
+
 }

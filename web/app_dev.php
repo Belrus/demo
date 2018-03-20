@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
 $loader = require __DIR__ . '/../config/autoload.php';
-require_once __DIR__ . '/../MicroKernel.php';
+require_once __DIR__ . '/../config/MicroKernel.php';
 Debug::enable();
 $kernel = new MicroKernel('dev', true);
 $request = Request::createFromGlobals();

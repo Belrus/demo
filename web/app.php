@@ -9,7 +9,7 @@
 use Symfony\Component\HttpFoundation\Request;
 
 $loader = require __DIR__ . '/../config/autoload.php';
-require_once __DIR__ . '/../MicroKernel.php';
+require_once __DIR__ . '/../config/MicroKernel.php';
 $kernel = new MicroKernel('prod', false);
 $kernel->loadClassCache();
 $request = Request::createFromGlobals();

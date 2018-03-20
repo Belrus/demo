@@ -26,6 +26,7 @@ class MicroKernel extends Kernel
         $bundles = [
           new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
           new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+          new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
           new Symfony\Bundle\TwigBundle\TwigBundle(),
           new DemoBundle\DemoBundle(),
         ];
@@ -57,7 +58,7 @@ class MicroKernel extends Kernel
       ContainerBuilder $c,
       LoaderInterface $loader
     ) {
-        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
+        $loader->load(__DIR__ . '/config_' . $this->getEnvironment() . '.yml');
     }
 
 }
