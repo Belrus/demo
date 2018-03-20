@@ -11,5 +11,5 @@
 /bin/*
 /vendor/
 
-/.idea/
+.idea
 
