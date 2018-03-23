@@ -29,6 +29,7 @@ class MicroKernel extends Kernel
           new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
           new Symfony\Bundle\TwigBundle\TwigBundle(),
           new DemoBundle\DemoBundle(),
+          new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
         ];
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();

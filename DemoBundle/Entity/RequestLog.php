@@ -28,14 +28,9 @@ class RequestLog
     protected $id;
 
     /**
-     * @ORM\Column(name="request_date", type="date", nullable=false)
+     * @ORM\Column(name="request_date", type="datetime", nullable=false)
      */
     protected $requestDate;
-
-    /**
-     * @ORM\Column(name="request_time", type="time", nullable=false)
-     */
-    protected $requestTime;
 
     /**
      * @ORM\Column(name="ip", type="string", length=15, nullable=false)
@@ -49,10 +44,10 @@ class RequestLog
     protected $requestUrl;
 
     /**
-     * @ORM\Column(name="request_path", type="string", length=255,
+     * @ORM\Column(name="response_url", type="string", length=255,
      *   nullable=false)
      */
-    protected $requestPath;
+    protected $responseUrl;
 
     /**
      * @return mixed
@@ -84,22 +79,6 @@ class RequestLog
     public function setRequestDate($requestDate)
     {
         $this->requestDate = $requestDate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRequestTime()
-    {
-        return $this->requestTime;
-    }
-
-    /**
-     * @param mixed $requestTime
-     */
-    public function setRequestTime($requestTime)
-    {
-        $this->requestTime = $requestTime;
     }
 
     /**
@@ -137,16 +116,16 @@ class RequestLog
     /**
      * @return mixed
      */
-    public function getRequestPath()
+    public function getResponseUrl()
     {
-        return $this->requestPath;
+        return $this->responseUrl;
     }
 
     /**
-     * @param mixed $requestPath
+     * @param mixed $responseUrl
      */
-    public function setRequestPath($requestPath)
+    public function setResponseUrl($responseUrl)
     {
-        $this->requestPath = $requestPath;
+        $this->responseUrl = $responseUrl;
     }
 }

@@ -12,7 +12,6 @@ namespace DemoBundle\Command;
 use DemoBundle\Entity\BrowserLog;
 use DemoBundle\Entity\RequestLog;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,12 +26,57 @@ class ImportDataFromLogs extends ContainerAwareCommand
           ->setDescription('Import data from logs');
     }
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /**
          * @var EntityManager $em
          */
         $em = $this->getContainer()->get('doctrine')->getManager();
+
+        $requestLogs = [];
+        $requestLogsCount = 0;
+        if (($handle = fopen(__DIR__ . "/../../config/inputData/request.log",
+            "r")) !== false) {
+            $output->writeln("Начинаем читать request.log файл!");
+            while (($line = fgets($handle)) !== false) {
+                $data = explode('|', $line);
+                $requestLogsCount++;
+                $requestLogs[] = [
+                  "requestDate" => \DateTime::createFromFormat('d.m.Y H:i',
+                    $data[0] . ' ' . $data[1]),
+                  "ip" => $data[2],
+                  "requestUrl" => $data[3],
+                  "responseUrl" => $data[4],
+                ];
+            }
+            fclose($handle);
+            $output->writeln("Найдено " . $requestLogsCount . " записей!");
+            if (!empty($requestLogs)) {
+                foreach ($requestLogs as $log) {
+                    $requestLog = new RequestLog();
+                    $requestLog->setRequestDate($log['requestDate']);
+                    $requestLog->setIp($log['ip']);
+                    $requestLog->setRequestUrl($log['requestUrl']);
+                    $requestLog->setResponseUrl($log['responseUrl']);
+                    $em->persist($requestLog);
+                }
+            }
+        } else {
+            $output->writeln("Не удалось прочитать browser.log файл!");
+        }
+
+        try {
+            $em->flush();
+            $output->writeln("Импорт реквест лога успешно завершился !");
+        } catch (\Exception $e) {
+            $output->writeln("Произошла ошибка: " . $e->getMessage());
+        }
 
         $browserLogs = [];
         $browserLogsCount = 0;
@@ -64,47 +108,11 @@ class ImportDataFromLogs extends ContainerAwareCommand
             $output->writeln("Не удалось прочитать browser.log файл!");
         }
 
-        $requestLogs = [];
-        $requestLogsCount = 0;
-        if (($handle = fopen(__DIR__ . "/../../config/inputData/request.log",
-            "r")) !== false) {
-            $output->writeln("Начинаем читать request.log файл!");
-            while (($line = fgets($handle)) !== false) {
-                $data = explode('|', $line);
-                $requestLogsCount++;
-                $requestLogs[] = [
-                  "requestDate" => new \DateTime($data[0]),
-                  "requestTime" => \DateTime::createFromFormat('H:i', $data[1]),
-                  "ip" => $data[2],
-                  "requestUrl" => $data[3],
-                  "requestPath" => $data[4],
-                ];
-            }
-            fclose($handle);
-            $output->writeln("Найдено " . $requestLogsCount . " записей!");
-            if (!empty($requestLogs)) {
-                foreach ($requestLogs as $log) {
-                    $requestLog = new RequestLog();
-                    $requestLog->setRequestDate($log['requestDate']);
-                    $requestLog->setRequestTime($log['requestTime']);
-                    $requestLog->setIp($log['ip']);
-                    $requestLog->setRequestUrl($log['requestUrl']);
-                    $requestLog->setRequestPath($log['requestPath']);
-                    $em->persist($requestLog);
-                }
-            }
-        } else {
-            $output->writeln("Не удалось прочитать browser.log файл!");
-        }
-
         try {
             $em->flush();
-            $output->writeln("Импорт успешно завершился !");
-        } catch (OptimisticLockException $e) {
+            $output->writeln("Импорт браузер лога успешно завершился !");
+        } catch (\Exception $e) {
             $output->writeln("Произошла ошибка: " . $e->getMessage());
         }
-
-
     }
-
 }

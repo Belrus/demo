@@ -1,1 +1,98 @@
-test 221
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Тестовое задание</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css"
+          rel="stylesheet"/>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+
+    <script type="text/javascript">
+        // Creation of data model
+        Ext.define('ExampleDataModel', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {ip: 'ip', mapping: 'ip'},
+                {ip: 'browser', mapping: 'browse'},
+                {ip: 'operating_system', mapping: 'operating_system'}
+            ]
+
+        });
+
+        Ext.onReady(function () {
+            var gridStore = Ext.create('Ext.data.Store', {
+                model: 'ExampleDataModel',
+                proxy: {
+                    type: 'ajax',
+                    url: '{{ path('demo_default_getlogs') }}',
+                    reader: {
+                        type: 'json',
+                        root: 'data'
+                    }
+                },
+                autoLoad: true,
+                pageSize: 5
+            });
+
+            Ext.create('Ext.grid.Panel', {
+                id: 'gridId',
+                store: gridStore,
+                plugins: 'gridfilters',
+                stripeRows: true,
+                title: 'Тестовый грид',
+                renderTo: 'gridDiv',
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: gridStore,
+                    displayInfo: true,
+                    displayMsg: 'Показано {0} - {1} из {2}',
+                    emptyMsg: "Ничего не найдено"
+                }),
+                width: '100%',
+                collapsible: false,
+                enableColumnMove: false,
+                enableColumnResize: true,
+                autoLoad: true,
+                columns:
+                    [{
+                        header: "IP адрес",
+                        dataIndex: 'ip',
+                        id: 'ip',
+                        hideable: false,
+                        filter: {
+                            type: 'string'
+                        }
+                    }, {
+                        header: "Браузер",
+                        dataIndex: 'browser',
+                        hideable: false,
+                        sortable: true
+                    }, {
+                        header: "ОС",
+                        dataIndex: 'os',
+                        hideable: false,
+                        sortable: true
+                    }, {
+                        header: "Адрес первого входа",
+                        hideable: false,
+                        sortable: false,
+                        dataIndex: 'firstrequesturl'
+                    }, {
+                        header: "Последним посетили",
+                        hideable: false,
+                        sortable: false,
+                        dataIndex: 'lastresponseurl'
+                    }, {
+                        header: "Кол-во посещений",
+                        hideable: false,
+                        sortable: false,
+                        dataIndex: 'count'
+                    }]
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div id="gridDiv"></div>
+</body>
+</html>
