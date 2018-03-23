@@ -3,3 +3,4 @@
 3) run './console doctrine:schema:update --force'
 4) run './console demo:import_logs_data'
 5) open site in browser
+6) Example https://www.screencast.com/t/gCPc1TOYM8s
